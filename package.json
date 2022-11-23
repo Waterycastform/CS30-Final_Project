@@ -21,7 +21,9 @@
       "no-unused-vars": "off"
     },
     "globals": {
-
+      
+      "Canvas": true,
+      "Sprite": true,
       "width": true,
       "height": true,
       "drawingContext": true,

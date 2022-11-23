@@ -1,6 +1,6 @@
 # Proposal
 
-description...
+I want to create 
 
 ## Need To Have List:
 - thing 1
