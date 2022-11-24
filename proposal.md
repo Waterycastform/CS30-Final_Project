@@ -12,6 +12,7 @@ I would like to create a Fire Boy & Water Girl clone game. This is a stage based
 - Box objects to move around
 - Game Instructions screen
 - Timer for levels
+- Sound effects and Backround music
 
 ## Nice To Have List:
 - Levers and Buttons to open doors
@@ -19,6 +20,5 @@ I would like to create a Fire Boy & Water Girl clone game. This is a stage based
 - Character Animations
 - Collectable Gems
 - Level Scoring system
-- Sound effects and Backround music
 - More levels with increasing difficulty
-- 
+
