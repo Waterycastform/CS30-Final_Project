@@ -9,6 +9,7 @@ I would like to create a Fire Boy & Water Girl clone game. This is a stage based
 - Start/End pages
 - Level Select page
 - Water/Lava obstacles
+- Box objects to move around
 - Game Instructions screen
 - Timer for levels
 
