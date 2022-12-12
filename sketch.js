@@ -14,15 +14,35 @@
 //   background(220);
 // }
 
-let sprite;
+let dummy;
 
 function setup() {
-  new Canvas(200, 100);
+  new Canvas(windowWidth, windowHeight);
 
-  sprite = new Sprite();
-  sprite.diameter = 50;
+  dummy = new Sprite();
+  dummy.diameter = 50;
 }
 
 function draw() {
   clear();
+  spriteMove();
 }
+
+function spriteMove() {
+  if (kb.pressing('left')) {
+    dummy.vel.x = -3;
+  }
+  else if (kb.pressing('right')) {
+    dummy.vel.x = 3;
+  }
+  else if (kb.pressing('up')) {
+    dummy.vel.y = -3;
+  }
+  else if (kb.pressing('down')) {
+    dummy.vel.y = 3;
+  }
+  else {
+    dummy.vel.x = 0;
+    dummy.vel.y = 0;
+  }
+} 
