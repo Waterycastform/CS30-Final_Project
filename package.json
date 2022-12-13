@@ -22,6 +22,9 @@
     },
     "globals": {
       
+      "allSprites": true,
+      "kb": true,
+      "world": true,
       "Canvas": true,
       "Sprite": true,
       "width": true,
