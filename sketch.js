@@ -39,7 +39,7 @@ function demoWorld() {
   ground.h = height*0.1;
   ground.collider = "static";
 
-  demoBox = new Sprite(300, 300, 50, 50);
+  demoBox = new Sprite(300, 300, 40, 40);
   demoBox.mass = 25;
 }
 
