@@ -52,21 +52,28 @@ function playerMove() {
   if (kb.pressing("a")) {
     player1.vel.x = -3;
   }
-  if (kb.pressing("d")) {
+  else if (kb.pressing("d")) {
     player1.vel.x = 3;
   }
-  if (player1.colliding(ground) && kb.presses("w")) {
+  else if (player1.vel.y !== 0) {
+    player1.vel.x = 0;
+  }
+  if (player1.vel.y === 0 && kb.presses("w")) {
     player1.vel.y = -5;
   }
+
 
   if (kb.pressing("g")) {
     player2.vel.x = -3;
   }
-  if (kb.pressing("j")) {
+  else if (kb.pressing("j")) {
     player2.vel.x = 3;
+  } 
+  else if (player2.vel.y !== 0) {
+    player2.vel.x = 0;
   }
-  else if (player2.colliding(ground) && kb.presses("y")) {
+  if (player2.vel.y === 0 && kb.presses("y")) {
     player2.vel.y = -5;
   }
-  console.log(player1.x);
+  console.log(kb.pressing("d"));
 } 
