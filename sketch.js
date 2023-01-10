@@ -7,25 +7,61 @@
 
 
 let player1, player2, ground, demoBox, dead;
+let state = "menu";
+let lastState = "none";
 
 function setup() {
+  createCanvas(600, 500);
+  rectMode(CENTER);
+  textAlign(CENTER, CENTER);
   new Canvas(600, 500);
   world.gravity.y = 9.8;
   allSprites.bounciness = 0;
-
-  demoWorld();
 }
 
 function draw() {
-  clear();
-  playerMove();
+  background(200);
+
+  if (state === "menu") {
+    titleScreen();
+  }
+  if (state === "game") {
+    demoWorld();
+  }
+  
+  lastState = state;
 }
 
 function demoWorld() {
-  createPlayers();
-  newBox();
-  makeGround();
-  deathBlock();
+  if (lastState === "menu") {
+    createPlayers();
+    newBox();
+    makeGround();
+    deathBlock();
+  }
+  playerMove();
+}
+
+function mouseInButton (left, right, top, bottom){
+  return mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom;
+}
+
+function titleScreen() {
+  
+  if (mouseInButton(width*0.375, width*0.625, height*0.45, height*0.55)){ 
+    fill (200, 100, 200,);
+  }
+  else {
+    fill (200, 100, 200, 150);
+  }
+  strokeWeight(4);
+  rect(width/2, height/2, width/4, height*0.10, 20);
+}
+
+function mousePressed(){ 
+  if (state === "menu" && mouseInButton(width*0.375, width*0.625, height*0.45, height*0.55)){
+    state = "game";
+  }
 }
 
 function createPlayers() {
@@ -94,5 +130,4 @@ function playerMove() {
   if (player2.vel.y === 0 && kb.presses("y")) {
     player2.vel.y = -5;
   }
-  console.log(kb.pressing("d"));
 } 
