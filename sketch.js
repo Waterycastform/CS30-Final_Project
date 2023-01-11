@@ -14,9 +14,7 @@ function setup() {
   createCanvas(600, 500);
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
-  new Canvas(600, 500);
-  world.gravity.y = 9.8;
-  allSprites.bounciness = 0;
+  
 }
 
 function draw() {
@@ -25,7 +23,15 @@ function draw() {
   if (state === "menu") {
     titleScreen();
   }
+
+  if (state === "rules") {
+    infoScreen();
+  }
+
   if (state === "game") {
+    new Canvas(600, 500);
+    world.gravity.y = 9.8;
+    allSprites.bounciness = 0;
     demoWorld();
   }
   
@@ -50,18 +56,54 @@ function titleScreen() {
   
   if (mouseInButton(width*0.375, width*0.625, height*0.45, height*0.55)){ 
     fill (200, 100, 200,);
+    rect(width/2, height/2, width/4, height*0.10, 20);
+    fill (200, 100, 200, 150);
+    rect(width/2, height*0.75, width/4, height*0.10, 20);
+  }
+
+  else if (mouseInButton(width*0.375, width*0.625, height*0.70, height*0.80)){ 
+    fill (200, 100, 200,);
+    rect(width/2, height*0.75, width/4, height*0.10, 20);
+    fill (200, 100, 200, 150);
+    rect(width/2, height/2, width/4, height*0.10, 20);
+  }
+
+  else {
+    fill (200, 100, 200, 150);
+    rect(width/2, height/2, width/4, height*0.10, 20);
+    rect(width/2, height*0.75, width/4, height*0.10, 20);
+  }
+
+  strokeWeight(4);
+}
+
+function infoScreen() {
+
+  if (mouseInButton(width*0.061, width*0.171, height*0.061, height*0.171)){
+    fill (200, 100, 200,);
+    rect(width/9, height/9, width*0.10, height*0.10, 20);
   }
   else {
     fill (200, 100, 200, 150);
+    rect(width/9, height/9, width*0.10, height*0.10, 20);
   }
-  strokeWeight(4);
-  rect(width/2, height/2, width/4, height*0.10, 20);
+  
+
 }
 
 function mousePressed(){ 
   if (state === "menu" && mouseInButton(width*0.375, width*0.625, height*0.45, height*0.55)){
     state = "game";
   }
+
+  if (state === "menu" && mouseInButton(width*0.375, width*0.625, height*0.70, height*0.80)){
+    state = "rules";
+  }
+
+  if (state === "rules" && mouseInButton(width*0.061, width*0.171, height*0.061, height*0.171)){
+    state = "menu";
+  }
+
 }
 
 function createPlayers() {
@@ -73,7 +115,6 @@ function createPlayers() {
   player2 = new Sprite(250, 250, 25, 60,);
   player2.rotationLock = true;
   player2.friction = 5;
-  player2.mass = 10;
   player2.overlap(player1); 
 }
 
@@ -95,12 +136,11 @@ function deathBlock() {
   dead = new Sprite();
   dead.x = width*0.8;
   dead.y = height*0.8;
-  dead.collider = "static";
+  dead.collider = "s";
 
-  if (player1.collides(dead)) {
-    clear();
-    demoWorld();
-  }
+  // if (player1.collides(dead)) {
+    
+  // }
 }
 
 function playerMove() {
