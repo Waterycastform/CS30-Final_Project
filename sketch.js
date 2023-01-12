@@ -10,6 +10,28 @@ let player1, player2, ground, demoBox, dead;
 let state = "menu";
 let lastState = "none";
 
+class Button {
+  constructor (xpos, ypos, width, height, col1, col2, state, newstate) {
+    this.x = xpos;
+    this.y = ypos;
+    this.width = width;
+    this.height = height;
+    this.color = col1;
+    this.hovcolor = col2;
+    this.state = state;
+    this.nextstate = newstate;
+  }
+
+  display() {
+    if (this.state === state) {
+
+    }  
+
+  mouseInButton (left, right, top, bottom){
+      return mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom;
+  }
+}
+
 function setup() {
   createCanvas(600, 500);
   rectMode(CENTER);
@@ -26,6 +48,10 @@ function draw() {
 
   if (state === "rules") {
     infoScreen();
+  }
+
+  if (state === "select") {
+    levelSelect();
   }
 
   if (state === "game") {
@@ -82,18 +108,38 @@ function infoScreen() {
   if (mouseInButton(width*0.061, width*0.171, height*0.061, height*0.171)){
     fill (200, 100, 200,);
     rect(width/9, height/9, width*0.10, height*0.10, 20);
+    fill (200, 100, 200, 150);
+    rect(width/2, height/2, width*0.60, height*0.75);
   }
   else {
     fill (200, 100, 200, 150);
     rect(width/9, height/9, width*0.10, height*0.10, 20);
-  }
-  
+    rect(width/2, height/2, width*0.60, height*0.75);
+  } 
+}
 
+function levelSelect() {
+
+  if (mouseInButton(width*0.2, width*0.3, height*(0.5-(width*0.05)), height*(0.5+(width*0.05)))){
+    fill (200, 100, 200,);
+    rect (width/4, height/2, width*0.1, width*0.1, 20);
+    fill (200, 100, 200, 150);
+    rect (width/2, height/2, width*0.1, width*0.1, 20);
+    rect (width*0.75, height/2, width*0.1, width*0.1, 20);
+  }
+  else {
+    fill (200, 100, 200, 150);
+    rect (width/4, height/2, width*0.1, width*0.1, 20);
+    rect (width/2, height/2, width*0.1, width*0.1, 20);
+    rect (width*0.75, height/2, width*0.1, width*0.1, 20);
+  } 
+
+  
 }
 
 function mousePressed(){ 
   if (state === "menu" && mouseInButton(width*0.375, width*0.625, height*0.45, height*0.55)){
-    state = "game";
+    state = "select";
   }
 
   if (state === "menu" && mouseInButton(width*0.375, width*0.625, height*0.70, height*0.80)){
@@ -104,6 +150,7 @@ function mousePressed(){
     state = "menu";
   }
 
+  // if (state === "select")
 }
 
 function createPlayers() {
