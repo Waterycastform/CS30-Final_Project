@@ -6,7 +6,7 @@
 // - learning and using p5.play extention
 
 
-let player1, player2, ground, demoBox, dead;
+let player1, player2, ground, plat1, demoBox, dead, gameButton, infoButton, backButton, stage1, stage2, stage3;
 let state = "menu";
 let lastState = "none";
 
@@ -20,23 +20,46 @@ class Button {
     this.hovcolor = col2;
     this.state = state;
     this.nextstate = newstate;
+    this.left = this.x - this.width/2;
+    this.right = this.x + this.width/2;
+    this.top = this.y - this.height/2;
+    this.bottom = this.y + this.height/2;
+  }
+
+  mouseInButton(left, right, top, bottom){
+    return mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom;
   }
 
   display() {
     if (this.state === state) {
-
+      if (this.mouseInButton(this.left, this.right, this.top, this.bottom)) {
+        fill(this.hovcolor);
+      }
+      else {
+        fill(this.color);
+      }
+      rect(this.x, this.y, this.width, this.height);
     }  
-
-  mouseInButton (left, right, top, bottom){
-      return mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom;
   }
 }
 
+
+
 function setup() {
+  
+  new Canvas(600, 500);
+  world.gravity.y = 9.8;
+  allSprites.bounciness = 0;
   createCanvas(600, 500);
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
-  
+  strokeWeight(4);
+  gameButton = new Button(width/2, height/2, width/4, height*0.10, "blue", "red", "menu", "select");
+  infoButton = new Button(width/2, height*0.75, width/4, height*0.10,"blue", "red", "menu", "rules");
+  backButton = new Button(width/9, height/9, width*0.10, height*0.10, "blue", "red", "rules", "menu");
+  stage1 = new Button(width/4, height/2, width*0.1, width*0.1, "blue", "red", "select", "game");
+  stage2 = new Button(width/2, height/2, width*0.1, width*0.1, "blue", "red", "select", "game");
+  stage3 = new Button(width*0.75, height/2, width*0.1, width*0.1, "blue", "red", "select", "game");
 }
 
 function draw() {
@@ -55,9 +78,7 @@ function draw() {
   }
 
   if (state === "game") {
-    new Canvas(600, 500);
-    world.gravity.y = 9.8;
-    allSprites.bounciness = 0;
+    
     demoWorld();
   }
   
@@ -68,93 +89,50 @@ function demoWorld() {
   if (lastState === "menu") {
     createPlayers();
     newBox();
-    makeGround();
+    mapTemp();
     deathBlock();
   }
   playerMove();
 }
 
-function mouseInButton (left, right, top, bottom){
-  return mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom;
-}
-
 function titleScreen() {
-  
-  if (mouseInButton(width*0.375, width*0.625, height*0.45, height*0.55)){ 
-    fill (200, 100, 200,);
-    rect(width/2, height/2, width/4, height*0.10, 20);
-    fill (200, 100, 200, 150);
-    rect(width/2, height*0.75, width/4, height*0.10, 20);
-  }
 
-  else if (mouseInButton(width*0.375, width*0.625, height*0.70, height*0.80)){ 
-    fill (200, 100, 200,);
-    rect(width/2, height*0.75, width/4, height*0.10, 20);
-    fill (200, 100, 200, 150);
-    rect(width/2, height/2, width/4, height*0.10, 20);
-  }
-
-  else {
-    fill (200, 100, 200, 150);
-    rect(width/2, height/2, width/4, height*0.10, 20);
-    rect(width/2, height*0.75, width/4, height*0.10, 20);
-  }
-
-  strokeWeight(4);
+  gameButton.display();
+  infoButton.display();
 }
 
 function infoScreen() {
 
-  if (mouseInButton(width*0.061, width*0.171, height*0.061, height*0.171)){
-    fill (200, 100, 200,);
-    rect(width/9, height/9, width*0.10, height*0.10, 20);
-    fill (200, 100, 200, 150);
-    rect(width/2, height/2, width*0.60, height*0.75);
-  }
-  else {
-    fill (200, 100, 200, 150);
-    rect(width/9, height/9, width*0.10, height*0.10, 20);
-    rect(width/2, height/2, width*0.60, height*0.75);
-  } 
+  backButton.display();
+
+  fill (200, 100, 200, 150);
+  rect(width/2, height/2, width*0.60, height*0.75);
 }
 
 function levelSelect() {
 
-  if (mouseInButton(width*0.2, width*0.3, height*(0.5-(width*0.05)), height*(0.5+(width*0.05)))){
-    fill (200, 100, 200,);
-    rect (width/4, height/2, width*0.1, width*0.1, 20);
-    fill (200, 100, 200, 150);
-    rect (width/2, height/2, width*0.1, width*0.1, 20);
-    rect (width*0.75, height/2, width*0.1, width*0.1, 20);
-  }
-  else {
-    fill (200, 100, 200, 150);
-    rect (width/4, height/2, width*0.1, width*0.1, 20);
-    rect (width/2, height/2, width*0.1, width*0.1, 20);
-    rect (width*0.75, height/2, width*0.1, width*0.1, 20);
-  } 
-
-  
+  stage1.display();
+  stage2.display();
+  stage3.display();
 }
 
-function mousePressed(){ 
-  if (state === "menu" && mouseInButton(width*0.375, width*0.625, height*0.45, height*0.55)){
-    state = "select";
+function clickedButton(button) {
+  if (state === button.state && button.mouseInButton(button.left, button.right, button.top, button.bottom)){
+    state = button.nextstate;
   }
+}
 
-  if (state === "menu" && mouseInButton(width*0.375, width*0.625, height*0.70, height*0.80)){
-    state = "rules";
-  }
-
-  if (state === "rules" && mouseInButton(width*0.061, width*0.171, height*0.061, height*0.171)){
-    state = "menu";
-  }
-
-  // if (state === "select")
+function mouseClicked(){ 
+  clickedButton(gameButton);
+  clickedButton(infoButton);
+  clickedButton(backButton);
+  clickedButton(stage1);
+  clickedButton(stage2);
+  clickedButton(stage3);
 }
 
 function createPlayers() {
-  player1 = new Sprite(150, 150, 25, 60,);
+  player1 = new Sprite(40, 450, 25, 60,);
   player1.rotationLock = true;
   player1.friction = 5;
   
@@ -170,13 +148,22 @@ function newBox() {
   demoBox.mass = 25;
 }
 
-function makeGround() {
+function mapTemp() {
+
   ground = new Sprite();
   ground.x = width/2;
-  ground.y = height*0.9 + ground.h;
+  ground.y = height*0.92 + ground.h;
   ground.w = width;
   ground.h = height*0.1;
   ground.collider = "static";
+
+  plat1 = new Sprite();
+  plat1.x = width/5;
+  plat1.w = width/5;
+  plat1.y = height*0.75;
+  plat1.h = height*0.05;
+  plat1.collider = "static";
+
 }
 
 function deathBlock() {
