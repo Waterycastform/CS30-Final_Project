@@ -6,7 +6,7 @@
 // - learning and using p5.play extention
 
 
-let player1, player2, ground, plat1, demoBox, dead, gameButton, infoButton, backButton, stage1, stage2, stage3;
+let player1, player2, floors, ground, celining, wall, walls, wallr, wallL, plat1, demoBox, dead, gameButton, infoButton, backButton, stage1, stage2, stage3;
 let state = "menu";
 let lastState = "none";
 
@@ -43,14 +43,12 @@ class Button {
   }
 }
 
-
-
 function setup() {
   
-  new Canvas(600, 500);
+  new Canvas(800, 700);
   world.gravity.y = 9.8;
   allSprites.bounciness = 0;
-  createCanvas(600, 500);
+  createCanvas(800, 700);
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
   strokeWeight(4);
@@ -69,15 +67,15 @@ function draw() {
     titleScreen();
   }
 
-  if (state === "rules") {
+  else if (state === "rules") {
     infoScreen();
   }
 
-  if (state === "select") {
+  else if (state === "select") {
     levelSelect();
   }
 
-  if (state === "game") {
+  else if (state === "game") {
     
     demoWorld();
   }
@@ -89,7 +87,7 @@ function demoWorld() {
   if (lastState === "menu") {
     createPlayers();
     newBox();
-    mapTemp();
+    map1();
     deathBlock();
   }
   playerMove();
@@ -123,6 +121,7 @@ function clickedButton(button) {
 }
 
 function mouseClicked(){ 
+  
   clickedButton(gameButton);
   clickedButton(infoButton);
   clickedButton(backButton);
@@ -132,12 +131,12 @@ function mouseClicked(){
 }
 
 function createPlayers() {
-  player1 = new Sprite(40, 450, 25, 60,);
+  player1 = new Sprite(40, 450, 25, 60);
   player1.rotationLock = true;
   player1.friction = 5;
   
 
-  player2 = new Sprite(250, 250, 25, 60,);
+  player2 = new Sprite(250, 250, 25, 60);
   player2.rotationLock = true;
   player2.friction = 5;
   player2.overlap(player1); 
@@ -148,22 +147,54 @@ function newBox() {
   demoBox.mass = 25;
 }
 
-function mapTemp() {
+function map1() {
 
-  ground = new Sprite();
-  ground.x = width/2;
-  ground.y = height*0.92 + ground.h;
-  ground.w = width;
-  ground.h = height*0.1;
-  ground.collider = "static";
+  boundaries();
+
+  floors = new Group();
+  floors.y = height;
+  floors.h = height*0.07;
+  floors.w = 100;
+  floors.collider = "static";
+
+  for (let i = 0; i < 3; i++) {
+    ground = new floors.Sprite();
+  }
+
+  floors[0].x = width/4;
+  floors[1].x = width*0.5;
+  floors[2].x = width*0.7;
 
   plat1 = new Sprite();
-  plat1.x = width/5;
+  plat1.x = plat1.w;
   plat1.w = width/5;
   plat1.y = height*0.75;
   plat1.h = height*0.05;
   plat1.collider = "static";
 
+}
+
+function boundaries() {
+  
+  walls = new Group();
+  walls.y = height/2;
+  walls.w = height*0.07;
+  walls.h = height;
+  walls.collider = "static";
+
+  for (let i = 0; i < 2; i++) {
+    wall = new walls.Sprite();
+  }
+
+  walls[0].x = 0;
+  walls[1].x = width;
+
+  celining = new Sprite();
+  celining.x = width/2;
+  celining.y = 0;
+  celining.w = width;
+  celining.h = height*0.07;
+  celining.collider = "static";
 }
 
 function deathBlock() {
