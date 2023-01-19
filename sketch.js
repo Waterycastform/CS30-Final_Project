@@ -198,7 +198,7 @@ function mouseClicked(){
 
 function createPlayers() {
   
-  player1 = new Sprite(60, 600, 25, 60);
+  player1 = new Sprite(60, height*0.95, 25, 60);
   player1.rotationLock = true;
   player1.friction = 5;
   player1.collider = "dynamic";
@@ -216,7 +216,7 @@ function createPlayers() {
 }
 
 function newBox() {
-  demoBox = new Sprite(width*0.55, height*0.99, 40, 40);
+  demoBox = new Sprite(width*0.55, 650, 40, 40);
   demoBox.mass = 25;
   demoBox.collider = "dynamic";
 }
@@ -343,7 +343,7 @@ function playerMove() {
   }
   else if (player1.vel.y !== 0) {
     player1.vel.x = 0;
-    // player1.friction(0);
+    // player1.friction = 0;
   }
   if (player1.vel.y === 0 && kb.presses("w")) {
     player1.vel.y = -5;
@@ -358,7 +358,7 @@ function playerMove() {
   } 
   else if (player2.vel.y !== 0) {
     player2.vel.x = 0;
-    // player2.friction(0);
+    // player2.friction = 0;
   }
   if (player2.vel.y === 0 && kb.presses("y")) {
     player2.vel.y = -5;
