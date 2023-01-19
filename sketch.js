@@ -6,7 +6,7 @@
 // - learning and using p5.play extention
 
 
-let player1, player2, floors, ground, celining, wall, walls, wallr, wallL, plat1, demoBox, dead, gameButton, infoButton, backButton, stage1, stage2, stage3;
+let player1, player2, floors, ground, floor1, celining, wall, walls, wallr, wallL, plat1, demoBox, dead, lava, water, portal, exit, gameButton, infoButton, backButton, stage1, stage2, stage3;
 let state = "menu";
 let lastState = "none";
 
@@ -52,13 +52,16 @@ function setup() {
   createCanvas(700, 700);
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
-  strokeWeight(4);
   gameButton = new Button(width/2, height/2, width/4, height*0.10, "blue", "red", "menu", "select");
   infoButton = new Button(width/2, height*0.75, width/4, height*0.10,"blue", "red", "menu", "rules");
   backButton = new Button(width/9, height/9, width*0.10, height*0.10, "blue", "red", "rules", "menu");
-  stage1 = new Button(width/4, height/2, width*0.1, width*0.1, "blue", "red", "select", "game");
-  stage2 = new Button(width/2, height/2, width*0.1, width*0.1, "blue", "red", "select", "game");
-  stage3 = new Button(width*0.75, height/2, width*0.1, width*0.1, "blue", "red", "select", "game");
+  backButton2 = new Button(width/9, height/9, width*0.10, height*0.10, "blue", "red", "select", "menu");
+  stage1 = new Button(width/4, height/2, width*0.1, width*0.1, "blue", "red", "select", "game1");
+  stage2 = new Button(width/2, height/2, width*0.1, width*0.1, "blue", "red", "select", "game2");
+  stage3 = new Button(width*0.75, height/2, width*0.1, width*0.1, "blue", "red", "select", "game3");
+  retryButton = new Button(width/2, height*0.6, width/4, height*0.10, "blue", "red", "retry", "select");
+  menuButton = new Button(width/2, height*0.75, width/4, height*0.10, "blue", "red", "retry", "menu")
+  winButton = new Button(width/2, height/2, width/4, height*0.1, "blue", "red", "win", "select");
 }
 
 function draw() {
@@ -76,33 +79,62 @@ function draw() {
     levelSelect();
   }
 
-  else if (state === "game") {
+  else if (state === "game1") {
     
-    demoWorld();
+    world1();
     update();
+    playerMove();
+  }
+
+  else if (state === "game2") {
+    world2();
+    update();
+    playerMove();
+  }
+
+  else if (state === "retry") {
+    deathMenu();
+  }
+
+  else if (state === "win") {
+    winMenu();
   }
   
   lastState = state;
 }
 
-function demoWorld() {
-  if (lastState === "menu") {
-    createPlayers();
-    // newBox();
+function world1() {
+  if (lastState === "select") {
+    
     map1();
-    deathBlock();
   }
-  playerMove();
+}
+
+function world2() {
+  if (lastState === "select") {
+    
+    createPlayers();
+    newBox();
+    map2();
+    deathBlock();
+    
+  }
 }
 
 function titleScreen() {
-
+  allSprites.remove();
   gameButton.display();
   infoButton.display();
+
+  fill("black");
+  textSize(60);
+  text("Fireboy & Watergirl :P", width/2, height*0.25);
+  textSize(25);
+  text("Start Game", width/2, height/2);
+  text("How to Play", width/2, height*0.75);
 }
 
 function infoScreen() {
-
   backButton.display();
 
   fill (200, 100, 200, 150);
@@ -110,10 +142,39 @@ function infoScreen() {
 }
 
 function levelSelect() {
-
+  allSprites.remove();
   stage1.display();
   stage2.display();
   stage3.display();
+  backButton2.display();
+
+  fill("black");
+  text("1", width/4, height/2);
+  text("2", width/2, height/2);
+  text("3", width*0.75, height/2);
+}
+
+function deathMenu() {
+  fill (0, 0, 0, 150);
+  rect(width/2, height/2, width, height);
+  fill (200, 100, 200, 150);
+  rect(width/2, height/2, width*0.60, height*0.75);
+
+  retryButton.display();
+  menuButton.display();
+  fill("black");
+  text("Try Again", width/2, height*0.6);
+  text("Back to Menu", width/2, height*0.75);
+}
+
+function winMenu() {
+
+  fill (200, 100, 200, 150);
+  rect(width/2, height/2, width*0.60, height*0.6);
+
+  winButton.display();
+  fill("black");
+  text("Next Level", width/2, height/2);
 }
 
 function clickedButton(button) {
@@ -123,62 +184,80 @@ function clickedButton(button) {
 }
 
 function mouseClicked(){ 
-  
-  clickedButton(gameButton);
-  clickedButton(infoButton);
-  clickedButton(backButton);
   clickedButton(stage1);
   clickedButton(stage2);
   clickedButton(stage3);
+  clickedButton(gameButton);
+  clickedButton(infoButton);
+  clickedButton(backButton);
+  clickedButton(backButton2);
+  clickedButton(retryButton);
+  clickedButton(menuButton);
+  clickedButton(winButton);
 }
 
 function createPlayers() {
-  player1 = new Sprite(40, 450, 25, 60);
+  
+  player1 = new Sprite(60, 600, 25, 60);
   player1.rotationLock = true;
   player1.friction = 5;
   player1.collider = "dynamic";
-  
-  
+  player1.color = "blue";
 
-  // player2 = new Sprite(40, 450, 25, 60);
-  // player2.rotationLock = true;
-  // player2.friction = 5;
-  // player2.collider = "dynamic";
-  // player2.overlap(player1); 
+
+  player2 = new Sprite(60, 500, 25, 60);
+  player2.rotationLock = true;
+  player2.friction = 5;
+  player2.collider = "dynamic";
+  player2.color = "red";
+  player2.overlap(player1); 
+  
+  portals();
 }
 
-// function newBox() {
-//   demoBox = new Sprite(300, 300, 40, 40);
-//   demoBox.mass = 25;
-//   demoBox.collider = "dynamic";
-// }
+function newBox() {
+  demoBox = new Sprite(width*0.55, 650, 40, 40);
+  demoBox.mass = 25;
+  demoBox.collider = "dynamic";
+}
 
 function map1() {
-
   boundaries();
+  createPlayers(); 
+  deathBlock();
+  newBox();
+  
+  ground = new Group() 
+  ground.color = color(176, 129, 69)
+  base = new ground.Sprite(width/2, height, width, 0)
+  plat1 = new ground.Sprite(width/7.5, height*0.82, width/5, height*0.04);
 
-  ground = new Sprite();
-  ground.x = width/2;
-  ground.y = height;
-  ground.w = width;
-  ground.h = height*0.1;
-  ground.collider = "static";
+  floor1 = new ground.Sprite(width/6, height, width/3, height*0.07);
+  floor1.overlap(water);
+  floor1.overlap(lava);
 
+  floor2 = new ground.Sprite(width*0.55, height, width/7, height*0.07)
+  floor3 = new ground.Sprite(width*0.9, height, width/4, height*0.07)
+}
+
+function map2() {
+  boundaries();
 
   plat1 = new Sprite();
   plat1.x = plat1.w;
   plat1.w = width/5;
-  plat1.y = height*0.75;
-  plat1.h = height*0.05;
+  plat1.y = height*0.82;
+  plat1.h = height*0.04;
 
+  new Sprite(width/2, height, width, height*0.07);
 }
 
 function boundaries() {
-  
   walls = new Group();
   walls.y = height/2;
   walls.w = height*0.07;
   walls.h = height;
+  walls.color = color(176, 129, 69);
 
   for (let i = 0; i < 3; i++) {
     wall = new walls.Sprite();
@@ -190,21 +269,68 @@ function boundaries() {
   walls[2].x = width/2;
   walls[2].y = 0;
   walls[2].rotation = 90;
-
 }
 
 function deathBlock() {
-  dead = new Sprite();
-  dead.x = width*0.8;
-  dead.y = height*0.8;
-  dead.collider = "s";
-  dead.update();
+  dead = new Group();
+  dead.collider = "static";
+
+  lava = new dead.Group()
+  lava.color = "red"
+  water = new dead.Group()
+  water.color = "blue"
+
+  if (state === "game1") {
+    for (let i = 0; i < 1; i++) {
+    new lava.Sprite()
+    new water.Sprite();
+    }
+    lava[0].y = height;
+    lava[0].h = height*0.05;
+    lava[0].x = width*0.415;
+    lava[0].w = width/6
+
+    water[0].y = height;
+    water[0].h = height*0.05
+    water[0].x = width*0.7;
+    water[0].w = width/6
+  }
+  
+  dead.overlap(player1);
+  dead.overlap(player2);
+}
+
+function portals() {
+  portal = new Group();
+  portal.collider = 's';
+  portal.w = width*0.05;
+  portal.y = height*0.9;
+  portal.h = height*0.2;
+  portal.overlap(player1);
+  portal.overlap(player2);
+
+  for (let i = 0; i < 2; i++) {
+    exit = new portal.Sprite()
+  }
+
+  portal[0].x = 600;
+  portal[0].color = "blue"
+  portal[1].x = width-width*0.07;
+  portal[1].color = "red";
 }
 
 function update() {
-  if (dead.collides(player1)) {
-    allSprites.remove();
-    state = "rules";
+  if (player1.overlapping(lava)) {
+    player1.remove()
+    state = "retry";
+  }
+  if (player2.overlapping(water)) {
+    player2.remove();
+    state = "retry";
+  }
+
+  if (player1.overlapping(portal[0]) && player2.overlapping(portal[1])) {
+    state = "win";
   }
 }
 
@@ -223,16 +349,16 @@ function playerMove() {
   }
 
 
-  // if (kb.pressing("g")) {
-  //   player2.vel.x = -3;
-  // }
-  // else if (kb.pressing("j")) {
-  //   player2.vel.x = 3;
-  // } 
-  // else if (player2.vel.y !== 0) {
-  //   player2.vel.x = 0;
-  // }
-  // if (player2.vel.y === 0 && kb.presses("y")) {
-  //   player2.vel.y = -5;
-  // }
+  if (kb.pressing("g")) {
+    player2.vel.x = -3;
+  }
+  else if (kb.pressing("j")) {
+    player2.vel.x = 3;
+  } 
+  else if (player2.vel.y !== 0) {
+    player2.vel.x = 0;
+  }
+  if (player2.vel.y === 0 && kb.presses("y")) {
+    player2.vel.y = -5;
+  }
 } 
