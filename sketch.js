@@ -343,7 +343,6 @@ function playerMove() {
   }
   else if (player1.vel.y !== 0) {
     player1.vel.x = 0;
-    // player1.friction = 0;
   }
   if (player1.vel.y === 0 && kb.presses("w")) {
     player1.vel.y = -5;
@@ -358,7 +357,6 @@ function playerMove() {
   } 
   else if (player2.vel.y !== 0) {
     player2.vel.x = 0;
-    // player2.friction = 0;
   }
   if (player2.vel.y === 0 && kb.presses("y")) {
     player2.vel.y = -5;
