@@ -6,7 +6,7 @@
 // - learning and using p5.play extention
 
 
-let backButton2, retryButton, menuButton, winButton, player1, player2, floors, ground, base, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, plat1, demoBox, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3;
+let backButton2, retryButton, menuButton, winButton, player1, player2, floors, ground, base, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, plat1, dynaBox, boxes, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3;
 let state = "menu";
 let lastState = "none";
 
@@ -105,7 +105,6 @@ function draw() {
 
 function world1() {
   if (lastState === "select") {
-    
     map1();
   }
 }
@@ -155,6 +154,7 @@ function levelSelect() {
 }
 
 function deathMenu() {
+  allSprites.remove();
   fill (0, 0, 0, 150);
   rect(width/2, height/2, width, height);
   fill (200, 100, 200, 150);
@@ -168,7 +168,7 @@ function deathMenu() {
 }
 
 function winMenu() {
-
+  allSprites.remove();
   fill (200, 100, 200, 150);
   rect(width/2, height/2, width*0.60, height*0.6);
 
@@ -176,6 +176,7 @@ function winMenu() {
   fill("black");
   text("Next Level", width/2, height/2);
 }
+
 
 function clickedButton(button) {
   if (state === button.state && button.mouseInButton(button.left, button.right, button.top, button.bottom)){
@@ -200,14 +201,14 @@ function createPlayers() {
   
   player1 = new Sprite(60, height*0.95, 25, 60);
   player1.rotationLock = true;
-  player1.friction = 5;
+  player1.friction = 0.8;
   player1.collider = "dynamic";
   player1.color = "blue";
 
 
   player2 = new Sprite(60, height*0.82, 25, 60);
   player2.rotationLock = true;
-  player2.friction = 5;
+  player2.friction = 0.8;
   player2.collider = "dynamic";
   player2.color = "red";
   player2.overlap(player1); 
@@ -215,29 +216,49 @@ function createPlayers() {
   portals();
 }
 
-function newBox() {
-  demoBox = new Sprite(width*0.55, 650, 40, 40);
-  demoBox.mass = 25;
-  demoBox.collider = "dynamic";
-}
+
+
 
 function map1() {
   boundaries();
-  createPlayers(); 
+  createPlayers();
+  newBox(); 
   deathBlock();
-  newBox();
   
+  // noStroke();
   ground = new Group(); 
   ground.color = color(176, 129, 69);
+
   base = new ground.Sprite(width/2, height, width, 0);
-  plat1 = new ground.Sprite(width/7.5, height*0.82, width/5, height*0.04);
+  plat1 = new ground.Sprite(width*0.13, height*0.82, width*0.19, height*0.04);
 
   floor1 = new ground.Sprite(width/6, height, width/3, height*0.07);
   floor1.overlap(water);
   floor1.overlap(lava);
-
   floor2 = new ground.Sprite(width*0.55, height, width/7, height*0.07);
   floor3 = new ground.Sprite(width*0.9, height, width/4, height*0.07);
+
+  jump1 = new ground.Sprite([[width*0.9-(width*0.07/2), height], [width-(width*0.07/2), height], [width-(width*0.07/2), height*0.9], [650-(width*0.07/2), height*0.9], [width*0.9-(width*0.07/2), 650], [width*0.9-(width*0.07/2), height]]);
+  jumpb = new ground.Sprite(width*0.9, height-height*0.07, width*0.14, height*0.07)
+
+  tfloor2 = new ground.Sprite(width*0.57, height*0.75+height*0.01, width/6, height*0.03-height*0.01);
+  tfloor1 = new ground.Sprite(width*0.7, height*0.75, width*0.1, height*0.04);
+  tfloor3 = new ground.Sprite(width*0.45, height*0.75, width*0.1, height*0.04);
+  tfloor3 = new ground.Sprite(width*0.38, height*0.67, width*0.04, height*0.2);
+  tfloor4 = new ground.Sprite(width*0.2, height*0.59, width*0.4, height*0.04);
+
+  jump2 = new ground.Sprite(width*0.08, height*0.52, width*0.1, height*0.1);
+
+  t2floor1 = new ground.Sprite(width*0.55, height*0.4+height*0.01, width*0.4, height*0.03-height*0.01);
+  t2floor2 = new ground.Sprite(width*0.3, height*0.4, width*0.15, height*0.04);
+  t2floor3 = new ground.Sprite(width*0.85, height*0.4, width*0.23, height*0.04);
+
+  jump3 = new ground.Sprite(width*0.93, height*0.34, width*0.08, height*0.08);
+  jump4 = new ground.Sprite(width*0.94, height*0.28, width*0.05, height*0.05);
+
+  ffloor1 = new ground.Sprite(width*0.48, height*0.2+height*0.01, width*0.19, height*0.03-height*0.01);
+  ffloor2 = new ground.Sprite(width*0.21, height*0.2, width*0.35, height*0.04);
+  ffloor3 = new ground.Sprite(width*0.65, height*0.2, width*0.3, height*0.04);
 }
 
 function map2() {
@@ -271,6 +292,26 @@ function boundaries() {
   walls[2].rotation = 90;
 }
 
+function newBox() {
+  boxes = new Group();
+  boxes.w = 40;
+  boxes.h = 40;
+  boxes.mass = 25;
+  boxes.collider = "dynamic";
+  boxes.color = "gray";
+
+  if (state === "game1") {
+    for (let i = 0; i < 2; i++){
+    new boxes.Sprite();
+  }
+
+  boxes[0].x = width*0.7;
+  boxes[0].y = 450;
+  boxes[1].x = width*0.3;
+  boxes[1].y = height*0.3;
+  }
+}
+
 function deathBlock() {
   dead = new Group();
   dead.collider = "static";
@@ -279,22 +320,46 @@ function deathBlock() {
   lava.color = "red";
   water = new dead.Group();
   water.color = "blue";
+  acid = new dead.Group();
+  acid.color = "green";
 
   if (state === "game1") {
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 2; i++) {
       new lava.Sprite();
+    }
+    for (let i = 0; i < 2; i++) {
       new water.Sprite();
     }
+    for (let i = 0; i < 1; i++) {
+      new acid.Sprite();
+    }
+
     lava[0].y = height;
     lava[0].h = height*0.05;
     lava[0].x = width*0.415;
     lava[0].w = width/6;
 
+    lava[1].y = height*0.4;
+    lava[1].h = height*0.03;
+    lava[1].x = width*0.55;
+    lava[1].w = width*0.4;
+
     water[0].y = height;
     water[0].h = height*0.05;
     water[0].x = width*0.7;
     water[0].w = width/6;
+
+    water[1].y = height*0.75;
+    water[1].h = height*0.03;
+    water[1].x = width*0.57;
+    water[1].w = width/6;
+
+    acid[0].y = height*0.2;
+    acid[0].h = height*0.03;
+    acid[0].x = width*0.48;
+    acid[0].w = width*0.19;
   }
+  
   
   dead.overlap(player1);
   dead.overlap(player2);
@@ -304,7 +369,7 @@ function portals() {
   portal = new Group();
   portal.collider = "s";
   portal.w = width*0.05;
-  portal.y = height*0.9;
+  portal.y = height*0.1;
   portal.h = height*0.2;
   portal.overlap(player1);
   portal.overlap(player2);
@@ -313,9 +378,9 @@ function portals() {
     exit = new portal.Sprite();
   }
 
-  portal[0].x = 600;
+  portal[0].x = 100;
   portal[0].color = "blue";
-  portal[1].x = width-width*0.07;
+  portal[1].x = width*0.07;
   portal[1].color = "red";
 }
 
@@ -325,6 +390,16 @@ function update() {
     state = "retry";
   }
   if (player2.overlapping(water)) {
+    player2.remove();
+    state = "retry";
+  }
+
+  if (player1.overlapping(acid)) {
+    player1.remove();
+    state = "retry";
+  }
+
+  if (player2.overlapping(acid)) {
     player2.remove();
     state = "retry";
   }
