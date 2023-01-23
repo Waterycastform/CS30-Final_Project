@@ -6,9 +6,15 @@
 // - learning and using p5.play extention
 
 
-let backButton2, retryButton, menuButton, winButton, player1, player2, floors, ground, base, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, plat1, dynaBox, boxes, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3;
+let countedTime, levelTime, backButton2, retryButton, menuButton, winButton, player1, player2, floors, ground, base, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, plat1, dynaBox, boxes, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3;
 let state = "menu";
 let lastState = "none";
+
+function preload() {
+  gameTheme = loadSound("song18.mp3");
+  bounce = loadSound("Jump.wav");
+  deathSound = loadSound("Explosion.wav");
+}
 
 class Button {
   constructor (xpos, ypos, width, height, col1, col2, state, newstate) {
@@ -52,6 +58,10 @@ function setup() {
   createCanvas(700, 700);
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
+  bounce.setVolume(0.2);
+  gameTheme.setVolume(1);
+  gameTheme.loop();
+  
   gameButton = new Button(width/2, height/2, width/4, height*0.10, "blue", "red", "menu", "select");
   infoButton = new Button(width/2, height*0.75, width/4, height*0.10,"blue", "red", "menu", "rules");
   backButton = new Button(width/9, height/9, width*0.10, height*0.10, "blue", "red", "rules", "menu");
@@ -66,6 +76,8 @@ function setup() {
 
 function draw() {
   background(200);
+  
+  gameTimer();
 
   if (state === "menu") {
     titleScreen();
@@ -80,7 +92,6 @@ function draw() {
   }
 
   else if (state === "game1") {
-    
     world1();
     update();
     playerMove();
@@ -100,12 +111,30 @@ function draw() {
     winMenu();
   }
   
-  lastState = state;
+  lastState = state; 
+}
+
+function gameTimer() {
+  if (state !== "game1") {
+    countedTime = millis();
+  }
+  else {
+    levelTime = millis() - countedTime;
+  }
+  return levelTime;
+}
+
+function timeBox() {
+  fill (176, 129, 69);
+  rect(width/2, height*0.05, width*0.1, height*0.06);
+  fill("black");
+  text (int(levelTime/1000), width/2, height*0.06);
 }
 
 function world1() {
   if (lastState === "select") {
     map1();
+    
   }
 }
 
@@ -154,6 +183,11 @@ function levelSelect() {
 }
 
 function deathMenu() {
+  if (!deathSound.isPlaying()) {
+    deathSound.play();
+  }
+  
+  
   allSprites.remove();
   fill (0, 0, 0, 150);
   rect(width/2, height/2, width, height);
@@ -215,9 +249,6 @@ function createPlayers() {
   
   portals();
 }
-
-
-
 
 function map1() {
   boundaries();
@@ -368,9 +399,9 @@ function deathBlock() {
 function portals() {
   portal = new Group();
   portal.collider = "s";
-  portal.w = width*0.05;
-  portal.y = height*0.1;
-  portal.h = height*0.2;
+  portal.w = width*0.07;
+  portal.y = height*0.13;
+  portal.h = height*0.1;
   portal.overlap(player1);
   portal.overlap(player2);
 
@@ -378,9 +409,9 @@ function portals() {
     exit = new portal.Sprite();
   }
 
-  portal[0].x = 100;
+  portal[0].x = 110;
   portal[0].color = "blue";
-  portal[1].x = width*0.07;
+  portal[1].x = width*0.075;
   portal[1].color = "red";
 }
 
@@ -407,6 +438,8 @@ function update() {
   if (player1.overlapping(portal[0]) && player2.overlapping(portal[1])) {
     state = "win";
   }
+
+  timeBox()
 }
 
 function playerMove() {
@@ -421,6 +454,7 @@ function playerMove() {
   }
   if (player1.vel.y === 0 && kb.presses("w")) {
     player1.vel.y = -5;
+    bounce.play();
   }
 
 
@@ -435,5 +469,6 @@ function playerMove() {
   }
   if (player2.vel.y === 0 && kb.presses("y")) {
     player2.vel.y = -5;
+    bounce.play();
   }
 } 

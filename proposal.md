@@ -8,11 +8,11 @@ I would like to create a Fire Boy & Water Girl clone game. This is a stage based
 - Working gravity for characters v
 - Start/End pages v
 - Level Select page v
-- Water/Lava obstacles
+- Water/Lava obstacles v
 - Box objects to move around v
 - Game Instructions screen v
-- Timer for levels
-- Sound effects and Backround music
+- Timer for levels v
+- Sound effects and Backround music v
 
 ## Nice To Have List:
 - Levers and Buttons to open doors
