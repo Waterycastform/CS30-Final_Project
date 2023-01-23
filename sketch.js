@@ -6,9 +6,10 @@
 // - learning and using p5.play extention
 
 
-let countedTime, levelTime, backButton2, retryButton, menuButton, winButton, player1, player2, floors, ground, base, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, plat1, dynaBox, boxes, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3;
+let countedTime, levelTime, backButton2, retryButton, menuButton, winButton, player1, player2, floors, ground, base, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, plat1, dynaBox, boxes, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3, gameTheme, bounce, deathSound, jump1, jump2, jump3, jump4, jumpb, tfloor1, t2floor1, tfloor3, tfloor4, tfloor2, t2floor2, t2floor3, ffloor1, ffloor2, ffloor3, acid;
 let state = "menu";
 let lastState = "none";
+let soundplayed = 0;
 
 function preload() {
   gameTheme = loadSound("song18.mp3");
@@ -115,13 +116,15 @@ function draw() {
 }
 
 function gameTimer() {
-  if (state !== "game1") {
+  if (state !== "game1" && state !== "game2") {
     countedTime = millis();
   }
   else {
     levelTime = millis() - countedTime;
   }
+  console.log(levelTime);
   return levelTime;
+  
 }
 
 function timeBox() {
@@ -134,7 +137,6 @@ function timeBox() {
 function world1() {
   if (lastState === "select") {
     map1();
-    
   }
 }
 
@@ -170,6 +172,7 @@ function infoScreen() {
 }
 
 function levelSelect() {
+  soundplayed = 0;
   allSprites.remove();
   stage1.display();
   stage2.display();
@@ -183,8 +186,11 @@ function levelSelect() {
 }
 
 function deathMenu() {
-  if (!deathSound.isPlaying()) {
-    deathSound.play();
+  if (soundplayed < 1) {
+    if (!deathSound.isPlaying()) {
+      deathSound.play();
+      soundplayed++;
+    }
   }
   
   
@@ -269,8 +275,8 @@ function map1() {
   floor2 = new ground.Sprite(width*0.55, height, width/7, height*0.07);
   floor3 = new ground.Sprite(width*0.9, height, width/4, height*0.07);
 
-  jump1 = new ground.Sprite([[width*0.9-(width*0.07/2), height], [width-(width*0.07/2), height], [width-(width*0.07/2), height*0.9], [650-(width*0.07/2), height*0.9], [width*0.9-(width*0.07/2), 650], [width*0.9-(width*0.07/2), height]]);
-  jumpb = new ground.Sprite(width*0.9, height-height*0.07, width*0.14, height*0.07)
+  jump1 = new ground.Sprite([[width*0.9-width*0.07/2, height], [width-width*0.07/2, height], [width-width*0.07/2, height*0.9], [650-width*0.07/2, height*0.9], [width*0.9-width*0.07/2, 650], [width*0.9-width*0.07/2, height]]);
+  jumpb = new ground.Sprite(width*0.9, height-height*0.07, width*0.14, height*0.07);
 
   tfloor2 = new ground.Sprite(width*0.57, height*0.75+height*0.01, width/6, height*0.03-height*0.01);
   tfloor1 = new ground.Sprite(width*0.7, height*0.75, width*0.1, height*0.04);
@@ -333,13 +339,13 @@ function newBox() {
 
   if (state === "game1") {
     for (let i = 0; i < 2; i++){
-    new boxes.Sprite();
-  }
+      new boxes.Sprite();
+    }
 
-  boxes[0].x = width*0.7;
-  boxes[0].y = 450;
-  boxes[1].x = width*0.3;
-  boxes[1].y = height*0.3;
+    boxes[0].x = width*0.7;
+    boxes[0].y = 450;
+    boxes[1].x = width*0.3;
+    boxes[1].y = height*0.3;
   }
 }
 
@@ -439,7 +445,7 @@ function update() {
     state = "win";
   }
 
-  timeBox()
+  timeBox();
 }
 
 function playerMove() {
