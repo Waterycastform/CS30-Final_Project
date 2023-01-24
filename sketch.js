@@ -6,7 +6,7 @@
 // - learning and using p5.play extention
 
 // defining all variables
-let countedTime, levelTime, backButton2, retryButton, menuButton, winButton, player1, player2, floors, ground, base, base1, base2, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, div1, div2, plat1, plat2, dynaBox, boxes, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3, gameTheme, bounce, deathSound, jump1, jump2, jump3, jump4, jumpb, bar1, bar2, tfloor1, t2floor1, tfloor3, tfloor4, tfloor2, t2floor2, t2floor3, ffloor1, ffloor2, ffloor3, acid;
+let countedTime, levelTime, backButton2, retryButton, menuButton, winButton, winSound, player1, player2, floors, ground, base, base1, base2, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, div1, div2, plat1, plat2, dynaBox, boxes, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3, gameTheme, bounce, deathSound, jump1, jump2, jump3, jump4, jumpb, bar1, bar2, tfloor1, t2floor1, tfloor3, tfloor4, tfloor2, t2floor2, t2floor3, ffloor1, ffloor2, ffloor3, acid;
 let state = "menu";
 let lastState = "none";
 let soundplayed = 0;
@@ -391,7 +391,7 @@ function map2() {
   createPlayers();
   newBox(); 
   deathBlock();
-  noStroke()
+  noStroke();
 
   //group so I dont have to set the color each time
   ground = new Group(); 
@@ -575,12 +575,12 @@ function portals() {
 
   if (state === "game1") {
     portal[0].x = 110;
-    portal[0].y = height*0.13
+    portal[0].y = height*0.13;
     portal[0].color = "brown";
     portal[0].text = "Water";
     portal[0].textColor = "blue";
     portal[1].x = width*0.075;
-    portal[1].y = height*0.13
+    portal[1].y = height*0.13;
     portal[1].color = "brown";
     portal[1].text = "Fire";
     portal[1].textColor = "red";
