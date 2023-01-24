@@ -6,7 +6,7 @@ Beta Tester 1: Mom and Dad
     -Noticed some friction collsion issues when jumping
     -They said instruction page was pretty clear
 
-Beta Tester 2: Aiden
+Beta Tester 2: Aidan
 -Conducted Jan. 23rd
 
     -Noted some friction issues when jumping and pressing against wall
