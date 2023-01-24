@@ -5,12 +5,13 @@
 // Extra for Experts:
 // - learning and using p5.play extention
 
-
+// defining all variables
 let countedTime, levelTime, backButton2, retryButton, menuButton, winButton, player1, player2, floors, ground, base, base1, base2, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, div1, div2, plat1, plat2, dynaBox, boxes, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3, gameTheme, bounce, deathSound, jump1, jump2, jump3, jump4, jumpb, bar1, bar2, tfloor1, t2floor1, tfloor3, tfloor4, tfloor2, t2floor2, t2floor3, ffloor1, ffloor2, ffloor3, acid;
 let state = "menu";
 let lastState = "none";
 let soundplayed = 0;
 
+// loading all sounds
 function preload() {
   gameTheme = loadSound("song18.mp3");
   bounce = loadSound("Jump.wav");
@@ -18,6 +19,7 @@ function preload() {
   winSound = loadSound("Pickup_Coin.wav");
 }
 
+// button class used through game
 class Button {
   constructor (xpos, ypos, width, height, col1, col2, state, newstate) {
     this.x = xpos;
@@ -34,6 +36,7 @@ class Button {
     this.bottom = this.y + this.height/2;
   }
 
+  // checks in mouse is in the button
   mouseInButton(left, right, top, bottom){
     return mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom;
   }
@@ -51,8 +54,9 @@ class Button {
   }
 }
 
+
 function setup() {
-  
+  // set up of the initial game parameters
   new Canvas(700, 700);
   world.gravity.y = 9.8;
   allSprites.bounciness = 0;
@@ -64,7 +68,7 @@ function setup() {
   gameTheme.setVolume(1);
   gameTheme.loop();
   
-  
+  // creating all the buttons
   gameButton = new Button(width/2, height/2, width/4, height*0.10, "gray", "lime", "menu", "select");
   infoButton = new Button(width/2, height*0.75, width/4, height*0.10,"gray", "lime", "menu", "rules");
   backButton = new Button(width/9, height/9, width*0.10, height*0.10, "gray", "red", "rules", "menu");
@@ -77,11 +81,13 @@ function setup() {
   winButton = new Button(width/2, height*0.65, width/4, height*0.1, "gray", "lime", "win", "select");
 }
 
+
 function draw() {
   background(200);
-  
+  //updates millis for timer
   gameTimer();
 
+  // all of the different states
   if (state === "menu") {
     titleScreen();
   }
@@ -117,7 +123,9 @@ function draw() {
   lastState = state; 
 }
 
+// counts time if not in one of the games then subtratcs from total millis to show time while in game
 function gameTimer() {
+  
   if (state !== "game1" && state !== "game2") {
     countedTime = millis();
   }
@@ -127,6 +135,7 @@ function gameTimer() {
   return levelTime;
 }
 
+//displays timer
 function timeBox() {
   fill (176, 129, 69);
   rect(width/2, height*0.05, width*0.1, height*0.06);
@@ -135,18 +144,19 @@ function timeBox() {
   text (int(levelTime/1000), width/2, height*0.06);
 }
 
+//calls the maps for both levels, only calls once
 function world1() {
   if (lastState === "select") {
     map1();
   }
 }
-
 function world2() {
   if (lastState === "select") {
     map2();
   }
 }
 
+//title screen formatting
 function titleScreen() {
   background(130, 78, 9);
   stroke(1);
@@ -168,6 +178,7 @@ function titleScreen() {
   text("How to Play", width/2, height*0.75);
 }
 
+//info screen formatting
 function infoScreen() {
   background(130, 78, 9);
   rectMode(CENTER);
@@ -184,6 +195,8 @@ function infoScreen() {
   text ("Welcome to Fireboy & Watergirl! This is a two-player game where you and a friend will complete levels by working together. Watergirl is controled with 'w,a,s,d' and Fireboy is controled with 'y,g,h,j'. Fireboy cannot run through water and Watergirl cannot run through Lava. However, they can both go through their own elements. Get to the gates at the ends of the levels to beat a stage! Beware however, green acid will kill both players!", 150, 0, 400, 700);
 }
 
+
+//level select formatting
 function levelSelect() {
   background(130, 78, 9);
   soundplayed = 0;
@@ -211,6 +224,7 @@ function levelSelect() {
   text("Check back soon!", width*0.75, height*0.43);
 }
 
+//death screen formatting + sound
 function deathMenu() {
   if (soundplayed < 1) {
     if (!deathSound.isPlaying()) {
@@ -242,6 +256,8 @@ function deathMenu() {
   text("It's not that hard is it?", width/2, height*0.5);
 }
 
+
+//win screen formatting + sound
 function winMenu() {
   if (soundplayed < 1) {
     if (!winSound.isPlaying()) {
@@ -269,12 +285,13 @@ function winMenu() {
 }
 
 
+//switches state to next state when button is pressed
 function clickedButton(button) {
   if (state === button.state && button.mouseInButton(button.left, button.right, button.top, button.bottom)){
     state = button.nextstate;
   }
 }
-
+//checks which button was clicked
 function mouseClicked(){ 
   clickedButton(stage1);
   clickedButton(stage2);
@@ -287,6 +304,8 @@ function mouseClicked(){
   clickedButton(winButton);
 }
 
+
+//creating player sprites for both levels
 function createPlayers() {
   
   if (state === "game1") {
@@ -318,17 +337,19 @@ function createPlayers() {
     player2.color = "red";
     player2.overlap(player1);
   }
-  
+  //spawn portals
   portals();
 }
 
+//first map creation
 function map1() {
   boundaries();
   createPlayers();
   newBox(); 
   deathBlock();
-  
   noStroke();
+
+  //group so I dont have to set the color each time
   ground = new Group(); 
   ground.color = color(176, 129, 69);
 
@@ -364,13 +385,15 @@ function map1() {
   ffloor3 = new ground.Sprite(width*0.65, height*0.2, width*0.3, height*0.04);
 }
 
+//second map creation
 function map2() {
   boundaries();
   createPlayers();
   newBox(); 
   deathBlock();
-
   noStroke()
+
+  //group so I dont have to set the color each time
   ground = new Group(); 
   ground.color = color(176, 129, 69);
 
@@ -399,6 +422,7 @@ function map2() {
   t2floor3 = new ground.Sprite(width*0.88, height*0.7, width*0.2, height*0.04);
 }
 
+//common boundaries for both levels
 function boundaries() {
   walls = new Group();
   walls.y = height/2;
@@ -418,6 +442,7 @@ function boundaries() {
   walls[2].rotation = 90;
 }
 
+//boxes for both levels
 function newBox() {
   boxes = new Group();
   boxes.w = 40;
@@ -449,10 +474,12 @@ function newBox() {
   }
 }
 
+//kill blocks for both levels
 function deathBlock() {
   dead = new Group();
   dead.collider = "static";
 
+  //creating subgroups based on elements
   lava = new dead.Group();
   lava.color = "red";
   water = new dead.Group();
@@ -533,6 +560,7 @@ function deathBlock() {
   dead.overlap(player2);
 }
 
+//portal positions for both levels
 function portals() {
   portal = new Group();
   portal.collider = "s";
@@ -571,6 +599,7 @@ function portals() {
   }
 }
 
+//update function so certain items keep updating while map only called once
 function update() {
   if (player1.overlapping(lava)) {
     player1.remove();
@@ -594,10 +623,11 @@ function update() {
   if (player1.overlapping(portal[0]) && player2.overlapping(portal[1])) {
     state = "win";
   }
-
+  //draw time
   timeBox();
 }
 
+//player key controls
 function playerMove() {
   if (kb.pressing("a")) {
     player1.vel.x = -3;
