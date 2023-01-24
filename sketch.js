@@ -63,16 +63,17 @@ function setup() {
   gameTheme.setVolume(1);
   gameTheme.loop();
   
-  gameButton = new Button(width/2, height/2, width/4, height*0.10, "blue", "red", "menu", "select");
-  infoButton = new Button(width/2, height*0.75, width/4, height*0.10,"blue", "red", "menu", "rules");
-  backButton = new Button(width/9, height/9, width*0.10, height*0.10, "blue", "red", "rules", "menu");
-  backButton2 = new Button(width/9, height/9, width*0.10, height*0.10, "blue", "red", "select", "menu");
-  stage1 = new Button(width/4, height/2, width*0.1, width*0.1, "blue", "red", "select", "game1");
-  stage2 = new Button(width/2, height/2, width*0.1, width*0.1, "blue", "red", "select", "game2");
-  stage3 = new Button(width*0.75, height/2, width*0.1, width*0.1, "blue", "red", "select", "game3");
-  retryButton = new Button(width/2, height*0.6, width/4, height*0.10, "blue", "red", "retry", "select");
-  menuButton = new Button(width/2, height*0.75, width/4, height*0.10, "blue", "red", "retry", "menu");
-  winButton = new Button(width/2, height/2, width/4, height*0.1, "blue", "red", "win", "select");
+  
+  gameButton = new Button(width/2, height/2, width/4, height*0.10, "gray", "lime", "menu", "select");
+  infoButton = new Button(width/2, height*0.75, width/4, height*0.10,"gray", "lime", "menu", "rules");
+  backButton = new Button(width/9, height/9, width*0.10, height*0.10, "gray", "red", "rules", "menu");
+  backButton2 = new Button(width/9, height/9, width*0.10, height*0.10, "gray", "red", "select", "menu");
+  stage1 = new Button(width/4, height/2, width*0.1, width*0.1, "gray", "lime", "select", "game1");
+  stage2 = new Button(width/2, height/2, width*0.1, width*0.1, "gray", "lime", "select", "game2");
+  stage3 = new Button(width*0.75, height/2, width*0.1, width*0.1, "gray", "red", "select", "game3");
+  retryButton = new Button(width/2, height*0.6, width/4, height*0.10, "gray", "lime", "retry", "select");
+  menuButton = new Button(width/2, height*0.75, width/4, height*0.10, "gray", "blue", "retry", "menu");
+  winButton = new Button(width/2, height*0.65, width/4, height*0.1, "gray", "lime", "win", "select");
 }
 
 function draw() {
@@ -122,15 +123,14 @@ function gameTimer() {
   else {
     levelTime = millis() - countedTime;
   }
-  console.log(levelTime);
   return levelTime;
-  
 }
 
 function timeBox() {
   fill (176, 129, 69);
   rect(width/2, height*0.05, width*0.1, height*0.06);
   fill("black");
+  textSize(25);
   text (int(levelTime/1000), width/2, height*0.06);
 }
 
@@ -152,28 +152,51 @@ function world2() {
 }
 
 function titleScreen() {
+  background(130, 78, 9);
+  stroke(1);
+  strokeWeight(2);
+  rectMode(CENTER);
   allSprites.remove();
   gameButton.display();
   infoButton.display();
 
-  fill("black");
+  fill(176, 129, 69);
+  rect(width/2, height*0.25, width*0.9, height*0.25);
+  fill("gold");
   textSize(60);
-  text("Fireboy & Watergirl :P", width/2, height*0.25);
+  text("Fireboy & Watergirl", width/2, height*0.25);
+  fill("black");
   textSize(25);
   text("Start Game", width/2, height/2);
   text("How to Play", width/2, height*0.75);
 }
 
 function infoScreen() {
+  background(130, 78, 9);
+  rectMode(CENTER);
   backButton.display();
+  fill ("black");
+  text("Back", width/9, height/9);
 
-  fill (200, 100, 200, 150);
+  fill (232, 172, 93);
   rect(width/2, height/2, width*0.60, height*0.75);
+
+  fill ("black");
+  textSize(27);
+  rectMode(CORNER);
+  text ("Welcome to Fireboy & Watergirl! This is a two-player game where you and a friend will complete levels by working together. Watergirl is controled with 'w,a,s,d' and Fireboy is controled with 'y,g,h,j'. Fireboy cannot run through water and Watergirl cannot run through Lava. However, they can both go through their own elements. Get to the gates at the ends of the levels to beat a stage! Beware however, green acid will kill both players!", 150, 0, 400, 700);
 }
 
 function levelSelect() {
+  background(130, 78, 9);
   soundplayed = 0;
+  textSize(25);
+  stroke(1);
+  strokeWeight(2);
   allSprites.remove();
+  fill(176, 129, 69);
+  rect(width/2, height/2, width*0.8, height*0.3);
+  rect(width/2, height*0.2, width*0.5, height*0.2);
   stage1.display();
   stage2.display();
   stage3.display();
@@ -183,6 +206,11 @@ function levelSelect() {
   text("1", width/4, height/2);
   text("2", width/2, height/2);
   text("3", width*0.75, height/2);
+  text("Back", width/9, height/9);
+  textSize(40);
+  text("Level Select", width/2, height*0.2);
+  textSize(15);
+  text("Check back soon!", width*0.75, height*0.43);
 }
 
 function deathMenu() {
@@ -193,28 +221,46 @@ function deathMenu() {
     }
   }
   
-  
   allSprites.remove();
+  stroke(1);
+  strokeWeight(2);
   fill (0, 0, 0, 150);
   rect(width/2, height/2, width, height);
-  fill (200, 100, 200, 150);
+  fill (176, 129, 69);
   rect(width/2, height/2, width*0.60, height*0.75);
+  
 
   retryButton.display();
   menuButton.display();
   fill("black");
+
+  textSize(25);
   text("Try Again", width/2, height*0.6);
   text("Back to Menu", width/2, height*0.75);
+  textSize(65);
+  text("You Died!", width/2, height*0.3);
+  textSize(30);
+  text("time: " + int(levelTime/1000) + " seconds", width/2, height*0.4);
+  text("It's not that hard is it?", width/2, height*0.5);
 }
 
 function winMenu() {
   allSprites.remove();
-  fill (200, 100, 200, 150);
+  stroke(1);
+  strokeWeight(2);
+  fill (204, 189, 24, 150);
+  rect(width/2, height/2, width, height);
+  fill (176, 129, 69);
   rect(width/2, height/2, width*0.60, height*0.6);
 
   winButton.display();
   fill("black");
-  text("Next Level", width/2, height/2);
+  textSize(25);
+  text("Next Level", width/2, height*0.65);
+  textSize(55);
+  text("Stage Cleared!", width/2, height*0.3);
+  textSize(30);
+  text("time: " + int(levelTime/1000) + " seconds", width/2, height*0.5);
 }
 
 
@@ -227,7 +273,6 @@ function clickedButton(button) {
 function mouseClicked(){ 
   clickedButton(stage1);
   clickedButton(stage2);
-  clickedButton(stage3);
   clickedButton(gameButton);
   clickedButton(infoButton);
   clickedButton(backButton);
@@ -257,12 +302,13 @@ function createPlayers() {
 }
 
 function map1() {
+  background(130, 78, 9);
   boundaries();
   createPlayers();
   newBox(); 
   deathBlock();
   
-  // noStroke();
+  noStroke();
   ground = new Group(); 
   ground.color = color(176, 129, 69);
 
@@ -406,7 +452,6 @@ function portals() {
   portal = new Group();
   portal.collider = "s";
   portal.w = width*0.07;
-  portal.y = height*0.13;
   portal.h = height*0.1;
   portal.overlap(player1);
   portal.overlap(player2);
@@ -415,10 +460,30 @@ function portals() {
     exit = new portal.Sprite();
   }
 
-  portal[0].x = 110;
-  portal[0].color = "blue";
-  portal[1].x = width*0.075;
-  portal[1].color = "red";
+  if (state === "game1") {
+    portal[0].x = 110;
+    portal[0].y = height*0.13
+    portal[0].color = "brown";
+    portal[0].text = "Water";
+    portal[0].textColor = "blue";
+    portal[1].x = width*0.075;
+    portal[1].y = height*0.13
+    portal[1].color = "brown";
+    portal[1].text = "Fire";
+    portal[1].textColor = "red";
+  }
+  if (state === "game2") {
+    portal[0].x = 610;
+    portal[0].y = height*0.9
+    portal[0].color = "brown";
+    portal[0].text = "Water";
+    portal[0].textColor = "blue";
+    portal[1].x = 510;
+    portal[1].y = height*0.9
+    portal[1].color = "brown";
+    portal[1].text = "Fire";
+    portal[1].textColor = "red";
+  }
 }
 
 function update() {
