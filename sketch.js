@@ -6,7 +6,7 @@
 // - learning and using p5.play extention
 
 
-let countedTime, levelTime, backButton2, retryButton, menuButton, winButton, player1, player2, floors, ground, base, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, plat1, dynaBox, boxes, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3, gameTheme, bounce, deathSound, jump1, jump2, jump3, jump4, jumpb, tfloor1, t2floor1, tfloor3, tfloor4, tfloor2, t2floor2, t2floor3, ffloor1, ffloor2, ffloor3, acid;
+let countedTime, levelTime, backButton2, retryButton, menuButton, winButton, player1, player2, floors, ground, base, base1, base2, floor1, floor2, floor3, celining, wall, walls, wallr, wallL, div1, div2, plat1, plat2, dynaBox, boxes, dead, lava, water, portal, gameButton, infoButton, backButton, stage1, stage2, stage3, gameTheme, bounce, deathSound, jump1, jump2, jump3, jump4, jumpb, bar1, bar2, tfloor1, t2floor1, tfloor3, tfloor4, tfloor2, t2floor2, t2floor3, ffloor1, ffloor2, ffloor3, acid;
 let state = "menu";
 let lastState = "none";
 let soundplayed = 0;
@@ -15,6 +15,7 @@ function preload() {
   gameTheme = loadSound("song18.mp3");
   bounce = loadSound("Jump.wav");
   deathSound = loadSound("Explosion.wav");
+  winSound = loadSound("Pickup_Coin.wav");
 }
 
 class Button {
@@ -142,12 +143,7 @@ function world1() {
 
 function world2() {
   if (lastState === "select") {
-    
-    createPlayers();
-    newBox();
     map2();
-    deathBlock();
-    
   }
 }
 
@@ -156,6 +152,7 @@ function titleScreen() {
   stroke(1);
   strokeWeight(2);
   rectMode(CENTER);
+  soundplayed = 0;
   allSprites.remove();
   gameButton.display();
   infoButton.display();
@@ -194,6 +191,7 @@ function levelSelect() {
   stroke(1);
   strokeWeight(2);
   allSprites.remove();
+
   fill(176, 129, 69);
   rect(width/2, height/2, width*0.8, height*0.3);
   rect(width/2, height*0.2, width*0.5, height*0.2);
@@ -245,6 +243,13 @@ function deathMenu() {
 }
 
 function winMenu() {
+  if (soundplayed < 1) {
+    if (!winSound.isPlaying()) {
+      winSound.play();
+      soundplayed++;
+    }
+  }
+
   allSprites.remove();
   stroke(1);
   strokeWeight(2);
@@ -284,25 +289,40 @@ function mouseClicked(){
 
 function createPlayers() {
   
-  player1 = new Sprite(60, height*0.95, 25, 60);
-  player1.rotationLock = true;
-  player1.friction = 0.8;
-  player1.collider = "dynamic";
-  player1.color = "blue";
+  if (state === "game1") {
+    player1 = new Sprite(60, height*0.95, 25, 60);
+    player1.rotationLock = true;
+    player1.friction = 0.8;
+    player1.collider = "dynamic";
+    player1.color = "blue";
 
+    player2 = new Sprite(60, height*0.82, 25, 60);
+    player2.rotationLock = true;
+    player2.friction = 0.8;
+    player2.collider = "dynamic";
+    player2.color = "red";
+    player2.overlap(player1); 
+  }
 
-  player2 = new Sprite(60, height*0.82, 25, 60);
-  player2.rotationLock = true;
-  player2.friction = 0.8;
-  player2.collider = "dynamic";
-  player2.color = "red";
-  player2.overlap(player1); 
+  if (state === "game2") {
+    player1 = new Sprite(60, height*0.1, 25, 60);
+    player1.rotationLock = true;
+    player1.friction = 0.8;
+    player1.collider = "dynamic";
+    player1.color = "blue";
+
+    player2 = new Sprite(640, height*0.1, 25, 60);
+    player2.rotationLock = true;
+    player2.friction = 0.8;
+    player2.collider = "dynamic";
+    player2.color = "red";
+    player2.overlap(player1);
+  }
   
   portals();
 }
 
 function map1() {
-  background(130, 78, 9);
   boundaries();
   createPlayers();
   newBox(); 
@@ -346,14 +366,37 @@ function map1() {
 
 function map2() {
   boundaries();
+  createPlayers();
+  newBox(); 
+  deathBlock();
 
-  plat1 = new Sprite();
-  plat1.x = plat1.w;
-  plat1.w = width/5;
-  plat1.y = height*0.82;
-  plat1.h = height*0.04;
+  noStroke()
+  ground = new Group(); 
+  ground.color = color(176, 129, 69);
 
-  new Sprite(width/2, height, width, height*0.07);
+  base = new ground.Sprite(width/2, height, width*0.4, height*0.07);
+  base1 = new ground.Sprite(width*0.1, height, width*0.15, height*0.07);
+  base2 = new ground.Sprite(width*0.9, height, width*0.15, height*0.07);
+  plat1 = new ground.Sprite(width*0.13, height*0.2, width*0.22, height*0.04);
+  plat2 = new ground.Sprite(width*0.87, height*0.2, width*0.22, height*0.04);
+
+  bar1 = new ground.Sprite(width*0.45, height*0.1, width*0.02, height*0.15);
+  bar2 = new ground.Sprite(width*0.55, height*0.1, width*0.02, height*0.15);
+  floor1 = new ground.Sprite(width*0.43, height*0.2, width*0.24, height*0.04);
+  floor2 = new ground.Sprite(width*0.57, height*0.2, width*0.24, height*0.04);
+  floor3 = new ground.Sprite(width*0.5, height*0.29, width*0.34, height*0.04);
+  floor1.rotation = 135;
+  floor2.rotation = 45;
+
+  div1 = new ground.Sprite(width*0.5, height*0.33, width*0.04, height*0.38);
+  tfloor1 = new ground.Sprite(width*0.5, height*0.5, width*0.65, height*0.04);
+  tfloor2 = new ground.Sprite(width*0.195, height*0.41, width*0.04, height*0.15);
+  tfloor3 = new ground.Sprite(width*0.805, height*0.41, width*0.04, height*0.15);
+
+  div2 = new ground.Sprite(width*0.5, height*0.85, width*0.04, height*0.3);
+  t2floor1 = new ground.Sprite(width*0.5, height*0.7, width*0.25, height*0.04);
+  t2floor2 = new ground.Sprite(width*0.12, height*0.7, width*0.2, height*0.04);
+  t2floor3 = new ground.Sprite(width*0.88, height*0.7, width*0.2, height*0.04);
 }
 
 function boundaries() {
@@ -392,6 +435,17 @@ function newBox() {
     boxes[0].y = 450;
     boxes[1].x = width*0.3;
     boxes[1].y = height*0.3;
+  }
+
+  if (state === "game2") {
+    for (let i = 0; i < 2; i++){
+      new boxes.Sprite();
+    }
+
+    boxes[0].x = width*0.37;
+    boxes[0].y = height*0.45;
+    boxes[1].x = width*0.63;
+    boxes[1].y = height*0.45;
   }
 }
 
@@ -443,6 +497,37 @@ function deathBlock() {
     acid[0].w = width*0.19;
   }
   
+  if (state === "game2") {
+    for (let i = 0; i < 1; i++) {
+      new lava.Sprite();
+    }
+    for (let i = 0; i < 1; i++) {
+      new water.Sprite();
+    }
+    for (let i = 0; i < 2; i++) {
+      new acid.Sprite();
+    }
+
+    lava[0].y = height*0.7;
+    lava[0].h = height*0.035;
+    lava[0].x = width*0.3;
+    lava[0].w = width*0.2;
+
+    water[0].y = height*0.7;
+    water[0].h = height*0.035;
+    water[0].x = width*0.7;
+    water[0].w = width*0.2;
+
+    acid[0].y = height;
+    acid[0].h = height*0.065;
+    acid[0].x = width*0.75;
+    acid[0].w = width*0.19;
+
+    acid[1].y = height;
+    acid[1].h = height*0.065;
+    acid[1].x = width*0.25;
+    acid[1].w = width*0.19;
+  }
   
   dead.overlap(player1);
   dead.overlap(player2);
@@ -473,13 +558,13 @@ function portals() {
     portal[1].textColor = "red";
   }
   if (state === "game2") {
-    portal[0].x = 610;
-    portal[0].y = height*0.9
+    portal[0].x = 645;
+    portal[0].y = height*0.915;
     portal[0].color = "brown";
     portal[0].text = "Water";
     portal[0].textColor = "blue";
-    portal[1].x = 510;
-    portal[1].y = height*0.9
+    portal[1].x = 55;
+    portal[1].y = height*0.915;
     portal[1].color = "brown";
     portal[1].text = "Fire";
     portal[1].textColor = "red";

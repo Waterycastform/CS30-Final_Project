@@ -4,7 +4,7 @@ I would like to create a Fire Boy & Water Girl clone game. This is a stage based
 
 ## Need To Have List:
 - 2 Player functionality v
-- 2 - 3 Stages
+- 2 - 3 Stages v
 - Working gravity for characters v
 - Start/End pages v
 - Level Select page v
